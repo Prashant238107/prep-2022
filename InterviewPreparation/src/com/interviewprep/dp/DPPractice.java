@@ -803,6 +803,113 @@ public class DPPractice {
         System.out.println("Repeating sequence is " + CommonFunctions.reverseString(reversedString));
     }
 
+    public static int maxSumBiotonicArray(int[] biotonic) {
+        int[] maxSumLToR = new int[biotonic.length];
+        int[] maxSumRToL = new int[biotonic.length];
+        for (int i = 0; i < biotonic.length; i++) {
+            maxSumRToL[i] = biotonic[i];
+            maxSumLToR[i] = biotonic[i];
+        }
+        for (int i = 1; i < biotonic.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (biotonic[i] > biotonic[j] && maxSumRToL[i] < maxSumLToR[j] + biotonic[i]) {
+                    maxSumRToL[i] = maxSumRToL[j] + biotonic[i];
+                }
+            }
+        }
+        for (int i = biotonic.length - 2; i >= 0; i--) {
+            for (int j = biotonic.length - 1; j > i; j--) {
+                if (biotonic[i] > biotonic[j] && maxSumLToR[i] < maxSumLToR[j] + biotonic[i]) {
+                    maxSumLToR[i] = maxSumLToR[j] + biotonic[i];
+                }
+            }
+        }
+        int maxSum = 0;
+        for (int i = 0; i < biotonic.length; i++) {
+            maxSum = Math.max(maxSum, (maxSumRToL[i] + maxSumLToR[i] - biotonic[i]));
+        }
+        return maxSum;
+    }
+
+    public static int maxLengthBiotonicArray(int[] biotonic) {
+        int[] maxLengthLToR = new int[biotonic.length];
+        int[] maxLengthRToL = new int[biotonic.length];
+        for (int i = 0; i < biotonic.length; i++) {
+            maxLengthRToL[i] = 1;
+            maxLengthLToR[i] = 1;
+        }
+        for (int i = 1; i < biotonic.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (biotonic[i] > biotonic[j] && maxLengthLToR[i] < maxLengthLToR[j] + 1) {
+                    maxLengthLToR[i] = maxLengthLToR[j] + 1;
+                }
+            }
+        }
+        for (int i = biotonic.length - 2; i >= 0; i--) {
+            for (int j = biotonic.length - 1; j > i; j--) {
+                if (biotonic[i] > biotonic[j] && maxLengthRToL[i] < maxLengthRToL[j] + 1) {
+                    maxLengthRToL[i] = maxLengthRToL[j] + 1;
+                }
+            }
+        }
+        int maxLength = 0;
+        for (int i = 0; i < biotonic.length; i++) {
+            maxLength = Math.max(maxLength, (maxLengthRToL[i] + maxLengthLToR[i] - 1));
+        }
+        return maxLength;
+    }
+
+    public static int maxSumIncreasingSubsequence(int[] input) {
+        int[] sum = new int[input.length];
+        for (int i = 0; i < input.length; i++) {
+            sum[i] = input[i];
+        }
+
+        for (int i = 1; i < input.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (input[i] > input[j] && sum[i] < input[i] + sum[j]) {
+                    sum[i] = input[i] + sum[j];
+                }
+            }
+        }
+
+        return Arrays.stream(sum).max().getAsInt();
+    }
+
+    public static int maxProductIncreasingSubsequence(int[] input) {
+        int[] product = new int[input.length];
+        for (int i = 0; i < input.length; i++) {
+            product[i] = input[i];
+        }
+
+        for (int i = 1; i < input.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (input[i] > input[j] && product[i] < input[i] * product[j]) {
+                    product[i] = input[i] * product[j];
+                }
+            }
+        }
+
+        return Arrays.stream(product).max().getAsInt();
+    }
+
+    public static int setWithProductLessThanK(int[] input, int k) {
+        int[][] setCount = new int[input.length + 1][k + 1];
+        for (int i = 0; i <= input.length; i++) {
+            for (int j = 0; j <= k; j++) {
+                if (i == 0 || j == 0) {
+                    setCount[i][j] = 0;
+                } else {
+                    setCount[i][j] = setCount[i - 1][j];
+                    if (input[i - 1] <= j && input[i - 1] > 0) {
+                        setCount[i][j] = setCount[i][j] + (setCount[i - 1][j / input[i - 1]] + 1);
+                    }
+                }
+            }
+        }
+        return setCount[input.length][k];
+    }
+
     static class Area {
         public int a, b;
 

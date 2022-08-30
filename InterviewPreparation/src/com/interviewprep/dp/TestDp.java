@@ -139,5 +139,21 @@ public class TestDp {
         System.out.println("Length of longest repeating sequence " + DPPractice.longestRepeatingSequence("AABEBCDD"));
 
         DPPractice.longestRepeatingSequencePrinting("AABEBCDD");
+
+        int[] maxSumBiotonic = {1, 15, 51, 45, 33, 100, 12, 18, 9};
+        System.out.println("Maximum Sum of biotonic array is " + DPPractice.maxSumBiotonicArray(maxSumBiotonic));
+
+        int[] maxLengthBiotonic = {0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15};
+        System.out.println("Maximum Length of biotonic array is " + DPPractice.maxLengthBiotonicArray(maxLengthBiotonic));
+
+        int[] maxSumSubsequence = {1, 101, 2, 3, 100, 4, 5};
+        System.out.println("Maximum sum increasing subsequence is " + DPPractice.maxSumIncreasingSubsequence(maxSumSubsequence));
+
+        int[] maxProductSubsequence = {3, 100, 4, 5, 150, 6};
+        System.out.println("Maximum product increasing subsequence is " + DPPractice.maxProductIncreasingSubsequence(maxProductSubsequence));
+
+        int[] setWithProductLessThanK = {1, 2, 3, 4};
+        int k = 10;
+        System.out.println("Number of sets with product less than " + k + " is " + DPPractice.setWithProductLessThanK(setWithProductLessThanK, k));
     }
 }
