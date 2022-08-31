@@ -1,5 +1,7 @@
 package com.interviewprep.dp;
 
+import com.interviewprep.common.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,12 +85,12 @@ public class TestDp {
 
         System.out.println("10C2%13 is equal to " + DPPractice.binomialCoefficientModulo(10, 2, 13));
 
-        DPPractice.Area x = new DPPractice.Area(3, 2);
-        DPPractice.Area y = new DPPractice.Area(-5, -10);
-        DPPractice.Area z = new DPPractice.Area(-20, 5);
+        Area x = new Area(3, 2);
+        Area y = new Area(-5, -10);
+        Area z = new Area(-20, 5);
         int a = 20;
         int b = 8;
-        HashMap<DPPractice.Pair, Integer> path = new HashMap<>();
+        HashMap<Pair, Integer> path = new HashMap<>();
         System.out.println("Maximum chances of survival path" +
                 DPPractice.maxOfThree(
                         DPPractice.choiceArea(a + x.a, b + x.b, x, y, z, path, 1),
@@ -161,5 +163,62 @@ public class TestDp {
 
         int[] maxSumWithNoAdjacent = new int[]{5, 5, 10, 100, 10, 5};
         System.out.println("Maximum sum with no adjacent elements " + DPPractice.sumWithNoAdjacentElement(maxSumWithNoAdjacent));
+
+        int[] adjacentArray = {1, 2, 3, 2, 3, 7, 2, 1};
+        System.out.println("Longest subsequence with adjacent difference 1 is " + DPPractice.longestSubsequenceWithAdjacentConsecutive(adjacentArray));
+
+        System.out.println("Longest subsequence with adjacent difference 1 is " + DPPractice.longestSubsequenceWithAdjacentConsecutiveOptimized(adjacentArray));
+
+        int[] maxSumTillIndexAndIncludeKthElement = {1, 101, 2, 3, 100, 4, 5};
+        int endIndex = 4, elementIncludedIndex = 6;
+        System.out.println("Maximum sum up till index " + endIndex + " and less than " + maxSumTillIndexAndIncludeKthElement[elementIncludedIndex] + " is " + DPPractice.maxSumTillIndexAndIncludeKthElement(maxSumTillIndexAndIncludeKthElement, endIndex, elementIncludedIndex));
+
+        Pair[] pairs = new Pair[]{
+                new Pair(5, 24),
+                new Pair(15, 25),
+                new Pair(27, 40),
+                new Pair(50, 60)
+        };
+        System.out.println("Maximum length of pairs with b < c is " + DPPractice.maxChainOfPairs(pairs));
+
+        Pair[] pairsPrinting = {new Pair(5, 29),
+                new Pair(39, 40),
+                new Pair(15, 28),
+                new Pair(27, 40),
+                new Pair(50, 90)
+        };
+        DPPractice.maxChainOfPairsPrinting(pairsPrinting);
+
+        int[] start = {1, 3, 0, 5, 8, 5};
+        int[] end = {2, 4, 6, 7, 9, 9};
+        Pair[] maxActivities = new Pair[start.length];
+        for (int i = 0; i < start.length; i++) {
+            maxActivities[i] = new Pair(start[i], end[i]);
+        }
+        System.out.println("Maximum activities that can take place " + DPPractice.maxActivitiesAndPrint(maxActivities));
+
+        int[][] cost = {
+                {1, 2, 3},
+                {6, 5, 4},
+                {7, 3, 9}
+        };
+        System.out.println("Maximum average cost path for matrix is " + DPPractice.maxAverage(cost));
+
+        System.out.println("Maximum games a player can play " + DPPractice.maxGames(10));
+
+        int[][] maxSumTriangle = {
+                {1, 0, 0},
+                {4, 8, 0},
+                {1, 5, 3}
+        };
+        System.out.println("Maximum sum path of the triangle " + DPPractice.maxSumPathInTriangleSpaceOptimized(maxSumTriangle));
+
+        int[][] minSumTriangle = {
+                {2, 0, 0},
+                {3, 9, 0},
+                {1, 6, 7}
+        };
+        System.out.println("Minimum sum path of the triangle " + DPPractice.minSumPathInTriangleSpaceOptimized(minSumTriangle));
+
     }
 }

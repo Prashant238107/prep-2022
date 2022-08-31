@@ -1,6 +1,7 @@
 package com.interviewprep.dp;
 
 import com.interviewprep.common.CommonFunctions;
+import com.interviewprep.common.Pair;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -932,40 +933,179 @@ public class DPPractice {
         return sum[input.length - 1];
     }
 
-    static class Area {
-        public int a, b;
-
-        public Area(int a, int b) {
-            this.a = a;
-            this.b = b;
+    public static int longestSubsequenceWithAdjacentConsecutive(int[] input) {
+        int[] adjacent = new int[input.length];
+        Arrays.fill(adjacent, 1);
+        for (int i = 1; i < input.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (Math.abs(input[i] - input[j]) == 1) {
+                    adjacent[i] = Math.max(adjacent[j] + 1, adjacent[i]);
+                }
+            }
         }
+
+        return Arrays.stream(adjacent).max().getAsInt();
     }
 
-    static class Pair {
-        public int first, second;
-
-        public Pair(int first, int second) {
-            this.first = first;
-            this.second = second;
+    public static int longestSubsequenceWithAdjacentConsecutiveOptimized(int[] input) {
+        if (input.length == 1) {
+            return 1;
         }
+        int[] sequenceLength = new int[input.length];
+        HashMap<Integer, Integer> mapValueAndIndex = new HashMap<>();
+        sequenceLength[0] = 1;
+        mapValueAndIndex.put(input[0], 0);
+        for (int i = 1; i < input.length; i++) {
+            if (Math.abs(input[i] - input[i - 1]) == 1) {
+                sequenceLength[i] = sequenceLength[i - 1] + 1;
+            } else if (mapValueAndIndex.containsKey(input[i] + 1) || mapValueAndIndex.containsKey(input[i] - 1)) {
+                sequenceLength[i] = 1 + Math.max(mapValueAndIndex.getOrDefault(input[i] + 1, 0),
+                        mapValueAndIndex.getOrDefault(input[i] - 1, 0));
+            } else {
+                sequenceLength[i] = 1;
+            }
+            mapValueAndIndex.put(input[i], sequenceLength[i]);
+        }
+        return Arrays.stream(sequenceLength).max().getAsInt();
+    }
+
+    public static int maxSumTillIndexAndIncludeKthElement(int[] input, int endIndex, int elementIncludedIndex) {
+        int[] lis = new int[endIndex + 1];
+        for (int i = 0; i <= endIndex; i++) {
+            lis[i] = input[i] < input[elementIncludedIndex] ? input[i] : 0;
+        }
+        for (int i = 1; i <= endIndex; i++) {
+            for (int j = 0; j < i; j++) {
+                if (input[i] > input[j] && input[i] < input[elementIncludedIndex] && input[j] < input[elementIncludedIndex]) {
+                    lis[i] = Math.max(lis[j] + input[i], lis[i]);
+                }
+            }
+        }
+
+        return Arrays.stream(lis).max().getAsInt() + input[elementIncludedIndex];
+    }
+
+    public static int maxChainOfPairs(Pair[] pairs) {
+        Arrays.sort(pairs);
+        int[] lis = new int[pairs.length];
+        Arrays.fill(lis, 1);
+        for (int i = 1; i < pairs.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (pairs[j].second < pairs[i].first) {
+                    lis[i] = Math.max(lis[i], lis[j] + 1);
+                }
+            }
+        }
+        return Arrays.stream(lis).max().getAsInt();
+    }
+
+    public static void maxChainOfPairsPrinting(Pair[] pairs) {
+        Arrays.sort(pairs);
+        ArrayList<Pair>[] lis = new ArrayList[pairs.length];
+        for (int i = 0; i < pairs.length; i++) {
+            lis[i] = new ArrayList<Pair>();
+            lis[i].add(pairs[i]);
+        }
+        for (int i = 1; i < pairs.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (pairs[j].second < pairs[i].first) {
+                    int sizeWithJ = lis[j].size() + 1;
+                    int currentSize = lis[i].size();
+                    if (sizeWithJ > currentSize) {
+                        lis[i].clear();
+                        lis[i] = ((ArrayList<Pair>) lis[j].clone());
+                        lis[i].add(pairs[i]);
+                    }
+                }
+            }
+        }
+
+        int index = -1;
+        int length = 0;
+        for (int i = 0; i < lis.length; i++) {
+            if (lis[i].size() > length) {
+                index = i;
+                length = lis[i].size();
+            }
+        }
+
+        System.out.println("Maximum length pairs are ");
+        lis[index].forEach(pair -> {
+            System.out.print("(" + pair.first + " , " + pair.second + ") ");
+        });
+    }
+
+    public static int maxActivitiesAndPrint(Pair[] pairs) {
+        Arrays.sort(pairs, new Comparator<Pair>() {
+            @Override
+            public int compare(Pair pair1, Pair pair2) {
+                return pair1.second > pair2.second ? 0 : -1;
+            }
+        });
+        System.out.println("Maximum chain of activities printing ");
+        System.out.print("(" + pairs[0].first + " , " + pairs[0].second + ") ");
+        int index = 0;
+        int count = 1;
+        for (int i = 1; i < pairs.length; i++) {
+            if (pairs[i].first > pairs[index].second) {
+                System.out.print("(" + pairs[i].first + " , " + pairs[i].second + ") ");
+                index = i;
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static double maxAverage(int[][] matrix) {
+        int[][] cost = new int[matrix.length][matrix.length];
+        cost[0][0] = matrix[0][0];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length; j++) {
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+                if (i == 0) {
+                    cost[i][j] = cost[i][j - 1] + matrix[i][j];
+                } else if (j == 0) {
+                    cost[i][j] = cost[i - 1][j] + matrix[i][j];
+                } else {
+                    cost[i][j] = Math.max(cost[i - 1][j], cost[i][j - 1]) + matrix[i][j];
+                }
+            }
+        }
+        System.out.println(cost[matrix.length - 1][matrix.length - 1]);
+        return (double) cost[matrix.length - 1][matrix.length - 1] / (2 * matrix.length - 1);
+    }
+
+    public static int maxGames(int n) {
+        int[] games = new int[n + 1];
+        games[0] = 1;
+        games[1] = 2;
+        int i = 1;
+        while (games[i++] < n) {
+            games[i] = games[i - 1] + games[i - 2];
+        }
+        if (games[i - 1] == n) {
+            return (i - 1);
+        }
+        return (i - 2);
+    }
+
+    public static int maxSumPathInTriangleSpaceOptimized(int[][] matrix) {
+        for (int i = matrix.length - 2; i >= 0; i--) {
+            for (int j = 0; j <= i; j++) {
+                matrix[i][j] = Math.max(matrix[i + 1][j], matrix[i + 1][j + 1]) + matrix[i][j];
+            }
+        }
+        return matrix[0][0];
+    }
+
+    public static int minSumPathInTriangleSpaceOptimized(int[][] matrix) {
+        for (int i = matrix.length - 2; i >= 0; i--) {
+            for (int j = 0; j <= i; j++) {
+                matrix[i][j] = Math.min(matrix[i + 1][j], matrix[i + 1][j + 1]) + matrix[i][j];
+            }
+        }
+        return matrix[0][0];
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
