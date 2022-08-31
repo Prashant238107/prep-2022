@@ -155,5 +155,11 @@ public class TestDp {
         int[] setWithProductLessThanK = {1, 2, 3, 4};
         int k = 10;
         System.out.println("Number of sets with product less than " + k + " is " + DPPractice.setWithProductLessThanK(setWithProductLessThanK, k));
+
+        int[] sumWithNoThreeConsecutive = {100, 1000, 100, 1000, 1};
+        System.out.println("Maximum sum with no three consecutive " + DPPractice.sumWithNoThreeConsecutive(sumWithNoThreeConsecutive));
+
+        int[] maxSumWithNoAdjacent = new int[]{5, 5, 10, 100, 10, 5};
+        System.out.println("Maximum sum with no adjacent elements " + DPPractice.sumWithNoAdjacentElement(maxSumWithNoAdjacent));
     }
 }

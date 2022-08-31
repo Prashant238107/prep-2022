@@ -910,6 +910,28 @@ public class DPPractice {
         return setCount[input.length][k];
     }
 
+    public static int sumWithNoThreeConsecutive(int[] input) {
+        int[] sum = new int[input.length];
+        sum[0] = input[0];
+        sum[1] = input[1] + input[0];
+        sum[2] = Math.max(sum[1], Math.max(input[0] + input[2], input[1] + input[2]));
+        for (int i = 3; i < input.length; i++) {
+            sum[i] = Math.max(Math.max(sum[i - 1], sum[i - 2] + input[i]), sum[i - 3] + input[i] + input[i - 1]);
+        }
+        return Arrays.stream(sum).max().getAsInt();
+    }
+
+    public static int sumWithNoAdjacentElement(int[] input) {
+        int[] sum = new int[input.length];
+        sum[0] = input[0];
+        sum[1] = Math.max(input[0], input[1]);
+        for (int i = 2; i < input.length; i++) {
+            sum[i] = Math.max(sum[i - 2] + input[i], input[i - 1]);
+        }
+
+        return sum[input.length - 1];
+    }
+
     static class Area {
         public int a, b;
 
